@@ -1,4 +1,3 @@
-// Car Repair Cost Estimation Widget - Standalone Version
 (function() {
     'use strict';
     
@@ -56,7 +55,7 @@
         'Audi', 'Tesla', 'Lexus', 'Subaru', 'Mitsubishi', 'Other'
     ];
 
-    // Create widget styles
+    // Updated widget styles
     const styles = `
         #car-repair-widget * {
             box-sizing: border-box;
@@ -67,20 +66,19 @@
         #car-repair-widget {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             position: fixed;
-            top: 50%;
-            left: 20px;
-            transform: translateY(-50%);
+            bottom: 20px;
+            right: 20px;
             z-index: 999999;
         }
         
         .crw-toggle-btn {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -97,8 +95,8 @@
         }
         
         .crw-toggle-btn:hover {
-            transform: translateY(-50%) scale(1.1);
-            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
             animation: none;
         }
         
@@ -108,13 +106,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000000;
-            padding: 20px;
-            backdrop-filter: blur(5px);
+            padding: 16px;
+            backdrop-filter: blur(8px);
         }
         
         .crw-modal.show {
@@ -129,19 +127,19 @@
         
         .crw-modal-content {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             position: relative;
             animation: slideUp 0.3s ease;
         }
         
         @keyframes slideUp {
             from {
-                transform: translateY(50px);
+                transform: translateY(100px);
                 opacity: 0;
             }
             to {
@@ -151,38 +149,38 @@
         }
         
         .crw-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             color: white;
-            padding: 20px;
+            padding: 24px;
             text-align: center;
-            border-radius: 12px 12px 0 0;
+            border-radius: 16px 16px 0 0;
             position: relative;
         }
         
         .crw-header h2 {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 5px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
         
         .crw-header p {
             opacity: 0.9;
-            font-size: 14px;
+            font-size: 16px;
         }
         
         .crw-close {
             position: absolute;
-            top: 15px;
-            right: 20px;
+            top: 16px;
+            right: 16px;
             background: none;
             border: none;
             color: white;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
             opacity: 0.8;
-            transition: opacity 0.2s;
-            width: 30px;
-            height: 30px;
+            transition: all 0.2s;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -191,21 +189,21 @@
         
         .crw-close:hover {
             opacity: 1;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
         }
         
         .crw-body {
-            padding: 30px;
+            padding: 24px;
         }
         
         .crw-form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         
         .crw-label {
             display: block;
             margin-bottom: 8px;
-            color: #333;
+            color: #1f2937;
             font-weight: 500;
             font-size: 14px;
         }
@@ -213,9 +211,9 @@
         .crw-select, .crw-input {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e9ecef;
+            border: 2px solid #e5e7eb;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 16px;
             transition: all 0.2s;
             background: white;
             font-family: inherit;
@@ -223,31 +221,31 @@
         
         .crw-select:focus, .crw-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
         
         .crw-checkbox-group {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            padding: 15px;
-            background: #f8f9fa;
+            gap: 12px;
+            margin-top: 12px;
+            padding: 16px;
+            background: #f9fafb;
             border-radius: 8px;
-            border: 2px solid #e9ecef;
+            border: 2px solid #e5e7eb;
             transition: border-color 0.2s;
         }
         
         .crw-checkbox-group:hover {
-            border-color: #667eea;
+            border-color: #4f46e5;
         }
         
         .crw-checkbox {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
-            accent-color: #667eea;
+            accent-color: #4f46e5;
         }
         
         .crw-checkbox-group .crw-label {
@@ -259,7 +257,7 @@
         .crw-btn {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -267,13 +265,13 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             font-family: inherit;
         }
         
         .crw-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
         }
         
         .crw-btn:active {
@@ -287,21 +285,21 @@
         }
         
         .crw-btn.secondary {
-            background: #6c757d;
+            background: #6b7280;
             margin-bottom: 0;
         }
         
         .crw-btn.secondary:hover {
-            background: #5a6268;
+            background: #4b5563;
         }
         
         .crw-result {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: #f9fafb;
             padding: 20px;
             border-radius: 8px;
             margin-top: 20px;
             display: none;
-            border: 1px solid #dee2e6;
+            border: 1px solid #e5e7eb;
         }
         
         .crw-result.show {
@@ -321,88 +319,94 @@
         }
         
         .crw-cost-breakdown {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
         
         .crw-cost-breakdown h3 {
-            color: #667eea;
-            margin-bottom: 5px;
+            color: #4f46e5;
+            margin-bottom: 8px;
             text-align: center;
+            font-size: 20px;
+            font-weight: 600;
         }
         
         .crw-cost-breakdown p {
-            color: #666;
-            font-size: 13px;
+            color: #4b5563;
+            font-size: 14px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         
         .crw-cost-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             padding: 8px 0;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid #e5e7eb;
         }
         
         .crw-cost-item:last-child {
             border-bottom: none;
             font-weight: 600;
-            font-size: 16px;
-            color: #667eea;
-            margin-top: 10px;
-            padding-top: 15px;
-            border-top: 2px solid #667eea;
+            font-size: 18px;
+            color: #4f46e5;
+            margin-top: 12px;
+            padding-top: 16px;
+            border-top: 2px solid #4f46e5;
         }
         
         .crw-warning {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
             padding: 12px;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-size: 13px;
-            color: #856404;
-            line-height: 1.4;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #92400e;
+            line-height: 1.5;
         }
         
         .crw-lead-form {
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 2px solid #e9ecef;
+            border-top: 2px solid #e5e7eb;
         }
         
         .crw-lead-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 15px;
+            color: #1f2937;
+            margin-bottom: 16px;
             text-align: center;
         }
         
         .crw-form-row {
             display: flex;
-            gap: 15px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         
         .crw-form-row .crw-form-group {
             flex: 1;
+            min-width: 200px;
         }
         
         .crw-success-message {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
+            background: #d1fae5;
+            border: 1px solid #6ee7b7;
+            color: #065f46;
             padding: 12px;
-            border-radius: 6px;
-            margin-top: 15px;
+            border-radius: 8px;
+            margin-top: 16px;
             text-align: center;
             font-weight: 500;
         }
         
+        /* Responsive Design */
         @media (max-width: 768px) {
             #car-repair-widget {
-                left: 15px;
+                bottom: 16px;
+                right: 16px;
             }
             
             .crw-toggle-btn {
@@ -412,15 +416,29 @@
             }
             
             .crw-modal {
-                padding: 10px;
+                padding: 12px;
             }
             
             .crw-modal-content {
+                max-width: 95vw;
                 max-height: 95vh;
+                border-radius: 12px;
             }
             
             .crw-body {
                 padding: 20px;
+            }
+            
+            .crw-header {
+                padding: 20px;
+            }
+            
+            .crw-header h2 {
+                font-size: 20px;
+            }
+            
+            .crw-header p {
+                font-size: 14px;
             }
             
             .crw-form-row {
@@ -428,18 +446,15 @@
                 gap: 0;
             }
             
-            .crw-header {
-                padding: 15px;
-            }
-            
-            .crw-header h2 {
-                font-size: 18px;
+            .crw-form-row .crw-form-group {
+                min-width: 100%;
             }
         }
         
         @media (max-width: 480px) {
-            .crw-body {
-                padding: 15px;
+            #car-repair-widget {
+                bottom: 12px;
+                right: 12px;
             }
             
             .crw-toggle-btn {
@@ -447,10 +462,40 @@
                 height: 45px;
                 font-size: 18px;
             }
+            
+            .crw-modal {
+                padding: 8px;
+            }
+            
+            .crw-modal-content {
+                max-width: 98vw;
+            }
+            
+            .crw-body {
+                padding: 16px;
+            }
+            
+            .crw-header {
+                padding: 16px;
+            }
+            
+            .crw-header h2 {
+                font-size: 18px;
+            }
+            
+            .crw-select, .crw-input {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+            
+            .crw-btn {
+                font-size: 14px;
+                padding: 12px;
+            }
         }
     `;
 
-    // Create HTML structure
+    // Create HTML structure (unchanged)
     const widgetHTML = `
         <div id="car-repair-widget">
             <button class="crw-toggle-btn" id="crw-toggle" title="Get Car Repair Estimate">
@@ -460,7 +505,7 @@
             <div class="crw-modal" id="crw-modal">
                 <div class="crw-modal-content">
                     <div class="crw-header">
-                        <button class="crw-close" id="crw-close" title="Close">&times;</button>
+                        <button class="crw-close" id="crw-close" title="Close">×</button>
                         <h2>🚗 Car Repair Cost Estimator</h2>
                         <p>Get instant repair cost estimates in AUD</p>
                     </div>
@@ -539,7 +584,7 @@
         </div>
     `;
 
-    // Function to calculate repair cost
+    // Function to calculate repair cost (unchanged)
     function calculateCost(damageType, isLuxury) {
         const damage = repairData[damageType];
         if (!damage) return null;
@@ -572,7 +617,7 @@
         };
     }
 
-    // Function to format currency
+    // Function to format currency (unchanged)
     function formatCurrency(amount) {
         return new Intl.NumberFormat('en-AU', {
             style: 'currency',
@@ -582,7 +627,7 @@
         }).format(Math.round(amount));
     }
 
-    // Function to display cost breakdown
+    // Function to display cost breakdown (unchanged)
     function displayCostBreakdown(costs, damageType) {
         const breakdown = document.getElementById('cost-breakdown');
         const damageName = repairData[damageType].name;
@@ -609,34 +654,20 @@
         `;
     }
 
-    // Lead capture function (customize this for your backend)
+    // Lead capture function (unchanged)
     function submitLead(leadData) {
-        // This is where you would send the lead data to your server
-        // For now, we'll just log it and show a success message
         console.log('Lead captured:', leadData);
-        
-        // You can replace this with your actual API call
-        // Example:
-        // fetch('/api/leads', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(leadData)
-        // });
-        
         return Promise.resolve();
     }
 
-    // Initialize widget
+    // Initialize widget (unchanged)
     function initWidget() {
-        // Add styles
         const styleSheet = document.createElement('style');
         styleSheet.textContent = styles;
         document.head.appendChild(styleSheet);
 
-        // Add HTML
         document.body.insertAdjacentHTML('beforeend', widgetHTML);
 
-        // Get elements
         const toggle = document.getElementById('crw-toggle');
         const modal = document.getElementById('crw-modal');
         const close = document.getElementById('crw-close');
@@ -644,7 +675,6 @@
         const result = document.getElementById('crw-result');
         const leadForm = document.getElementById('lead-form');
 
-        // Event listeners
         toggle.addEventListener('click', () => {
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
@@ -660,7 +690,6 @@
             document.body.style.overflow = '';
         }
 
-        // Form submission
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             
@@ -674,21 +703,17 @@
                 if (costs) {
                     displayCostBreakdown(costs, damageType);
                     result.classList.add('show');
-                    
-                    // Scroll to result
                     result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
             }
         });
 
-        // Lead form submission
         leadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const submitBtn = leadForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             
-            // Show loading state
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
             
@@ -708,13 +733,11 @@
                 
                 await submitLead(leadData);
                 
-                // Show success message
                 const successDiv = document.createElement('div');
                 successDiv.className = 'crw-success-message';
                 successDiv.innerHTML = '✅ Thank you! We\'ll contact you soon with a detailed quote.';
                 leadForm.appendChild(successDiv);
                 
-                // Reset forms after delay
                 setTimeout(() => {
                     form.reset();
                     leadForm.reset();
@@ -731,31 +754,21 @@
             }
         });
 
-        // Close on Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.classList.contains('show')) {
                 closeModal();
             }
         });
 
-        // Add some analytics tracking (optional)
         function trackEvent(eventName, data = {}) {
-            // You can integrate with Google Analytics, Facebook Pixel, etc.
             console.log('Event:', eventName, data);
-            
-            // Example Google Analytics 4 tracking:
-            // if (typeof gtag !== 'undefined') {
-            //     gtag('event', eventName, data);
-            // }
         }
 
-        // Track widget interactions
         toggle.addEventListener('click', () => trackEvent('widget_opened'));
         form.addEventListener('submit', () => trackEvent('estimate_calculated'));
         leadForm.addEventListener('submit', () => trackEvent('lead_submitted'));
     }
 
-    // Wait for DOM to be ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initWidget);
     } else {
