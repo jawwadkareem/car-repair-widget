@@ -1,0 +1,13 @@
+{
+  "name": "car-repair-widget",
+  "version": "1.0.0",
+  "description": "Car Repair Cost Estimation Widget for Australian Market",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Static files ready'",
+    "start": "echo 'Static files served'"
+  },
+  "keywords": ["car", "repair", "widget", "australia", "cost", "estimate"],
+  "author": "Your Name",
+  "license": "MIT"
+}
