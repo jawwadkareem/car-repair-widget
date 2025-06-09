@@ -5,6 +5,20 @@
 //     if (window.CarRepairWidget) return;
 //     window.CarRepairWidget = true;
 
+//     // Default configuration
+//     const defaultConfig = {
+//         primaryColor: '#4f46e5',
+//         secondaryColor: '#7c3aed',
+//         logoUrl: '',
+//         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+//         disclaimer: 'Estimates are approximate. Contact us for a detailed inspection.',
+//         currency: 'AUD',
+//         region: 'Australia'
+//     };
+
+//     // Merge user config with defaults
+//     const config = { ...defaultConfig, ...(window.CarRepairWidgetConfig || {}) };
+
 //     // Widget data
 //     const repairData = {
 //         'rear-bumper': {
@@ -55,7 +69,7 @@
 //         'Audi', 'Tesla', 'Lexus', 'Subaru', 'Mitsubishi', 'Other'
 //     ];
 
-//     // Updated widget styles
+//     // Updated widget styles with dynamic colors and fonts
 //     const styles = `
 //         #car-repair-widget * {
 //             box-sizing: border-box;
@@ -64,7 +78,7 @@
 //         }
         
 //         #car-repair-widget {
-//             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+//             font-family: ${config.fontFamily};
 //             position: fixed;
 //             bottom: 20px;
 //             right: 20px;
@@ -74,11 +88,11 @@
 //         .crw-toggle-btn {
 //             width: 60px;
 //             height: 60px;
-//             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+//             background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
 //             border: none;
 //             border-radius: 50%;
 //             cursor: pointer;
-//             box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+//             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 //             transition: all 0.3s ease;
 //             display: flex;
 //             align-items: center;
@@ -96,7 +110,7 @@
         
 //         .crw-toggle-btn:hover {
 //             transform: scale(1.1);
-//             box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+//             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
 //             animation: none;
 //         }
         
@@ -149,12 +163,19 @@
 //         }
         
 //         .crw-header {
-//             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+//             background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
 //             color: white;
 //             padding: 24px;
 //             text-align: center;
 //             border-radius: 16px 16px 0 0;
 //             position: relative;
+//         }
+        
+//         .crw-logo {
+//             max-width: 150px;
+//             max-height: 60px;
+//             margin: 0 auto 12px;
+//             display: ${config.logoUrl ? 'block' : 'none'};
 //         }
         
 //         .crw-header h2 {
@@ -216,13 +237,13 @@
 //             font-size: 16px;
 //             transition: all 0.2s;
 //             background: white;
-//             font-family: inherit;
+//             font-family: ${config.fontFamily};
 //         }
         
 //         .crw-select:focus, .crw-input:focus {
 //             outline: none;
-//             border-color: #4f46e5;
-//             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+//             border-color: ${config.primaryColor};
+//             box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 //         }
         
 //         .crw-checkbox-group {
@@ -238,14 +259,14 @@
 //         }
         
 //         .crw-checkbox-group:hover {
-//             border-color: #4f46e5;
+//             border-color: ${config.primaryColor};
 //         }
         
 //         .crw-checkbox {
 //             width: 20px;
 //             height: 20px;
 //             cursor: pointer;
-//             accent-color: #4f46e5;
+//             accent-color: ${config.primaryColor};
 //         }
         
 //         .crw-checkbox-group .crw-label {
@@ -257,7 +278,7 @@
 //         .crw-btn {
 //             width: 100%;
 //             padding: 14px;
-//             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+//             background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
 //             color: white;
 //             border: none;
 //             border-radius: 8px;
@@ -266,12 +287,12 @@
 //             cursor: pointer;
 //             transition: all 0.2s;
 //             margin-bottom: 16px;
-//             font-family: inherit;
+//             font-family: ${config.fontFamily};
 //         }
         
 //         .crw-btn:hover {
 //             transform: translateY(-1px);
-//             box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+//             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 //         }
         
 //         .crw-btn:active {
@@ -323,7 +344,7 @@
 //         }
         
 //         .crw-cost-breakdown h3 {
-//             color: #4f46e5;
+//             color: ${config.primaryColor};
 //             margin-bottom: 8px;
 //             text-align: center;
 //             font-size: 20px;
@@ -349,10 +370,10 @@
 //             border-bottom: none;
 //             font-weight: 600;
 //             font-size: 18px;
-//             color: #4f46e5;
+//             color: ${config.primaryColor};
 //             margin-top: 12px;
 //             padding-top: 16px;
-//             border-top: 2px solid #4f46e5;
+//             border-top: 2px solid ${config.primaryColor};
 //         }
         
 //         .crw-warning {
@@ -392,9 +413,9 @@
 //         }
         
 //         .crw-success-message {
-//             background: #d1fae5;
-//             border: 1px solid #6ee7b7;
-//             color: #065f46;
+//             background: ${config.primaryColor}20;
+//             border: 1px solid ${config.primaryColor}80;
+//             color: ${config.primaryColor};
 //             padding: 12px;
 //             border-radius: 8px;
 //             margin-top: 16px;
@@ -431,6 +452,10 @@
             
 //             .crw-header {
 //                 padding: 20px;
+//             }
+            
+//             .crw-logo {
+//                 max-width: 120px;
 //             }
             
 //             .crw-header h2 {
@@ -479,6 +504,10 @@
 //                 padding: 16px;
 //             }
             
+//             .crw-logo {
+//                 max-width: 100px;
+//             }
+            
 //             .crw-header h2 {
 //                 font-size: 18px;
 //             }
@@ -495,7 +524,7 @@
 //         }
 //     `;
 
-//     // Create HTML structure (unchanged)
+//     // Updated HTML structure with logo and custom disclaimer
 //     const widgetHTML = `
 //         <div id="car-repair-widget">
 //             <button class="crw-toggle-btn" id="crw-toggle" title="Get Car Repair Estimate">
@@ -506,22 +535,23 @@
 //                 <div class="crw-modal-content">
 //                     <div class="crw-header">
 //                         <button class="crw-close" id="crw-close" title="Close">×</button>
+//                         ${config.logoUrl ? `<img src="${config.logoUrl}" alt="Brand Logo" class="crw-logo">` : ''}
 //                         <h2>🚗 Car Repair Cost Estimator</h2>
-//                         <p>Get instant repair cost estimates in AUD</p>
+//                         <p>Get instant repair cost estimates in ${config.currency}</p>
 //                     </div>
                     
 //                     <div class="crw-body">
 //                         <form id="crw-form">
 //                             <div class="crw-form-row">
 //                                 <div class="crw-form-group">
-//                                     <label class="crw-label">Car Make</label>
+//                                     <label class="crw-label" for="carMake">Car Make</label>
 //                                     <select class="crw-select" id="carMake" required>
 //                                         <option value="">Select Make</option>
 //                                         ${carMakes.map(make => `<option value="${make}">${make}</option>`).join('')}
 //                                     </select>
 //                                 </div>
 //                                 <div class="crw-form-group">
-//                                     <label class="crw-label">Year</label>
+//                                     <label class="crw-label" for="carYear">Year</label>
 //                                     <select class="crw-select" id="carYear" required>
 //                                         <option value="">Select Year</option>
 //                                         ${Array.from({length: 25}, (_, i) => {
@@ -533,7 +563,7 @@
 //                             </div>
                             
 //                             <div class="crw-form-group">
-//                                 <label class="crw-label">Type of Damage</label>
+//                                 <label class="crw-label" for="damageType">Type of Damage</label>
 //                                 <select class="crw-select" id="damageType" required>
 //                                     <option value="">Select Damage Type</option>
 //                                     ${Object.entries(repairData).map(([key, data]) => 
@@ -555,7 +585,7 @@
 //                         <div class="crw-result" id="crw-result">
 //                             <div class="crw-cost-breakdown" id="cost-breakdown"></div>
 //                             <div class="crw-warning">
-//                                 ⚠️ <strong>Important:</strong> Hidden damage (e.g., suspension, frame) may increase costs. This estimate is approximate - contact a professional for detailed inspection.
+//                                 ⚠️ <strong>Important:</strong> ${config.disclaimer}
 //                             </div>
                             
 //                             <div class="crw-lead-form">
@@ -584,7 +614,7 @@
 //         </div>
 //     `;
 
-//     // Function to calculate repair cost (unchanged)
+//     // Function to calculate repair cost (updated for currency support)
 //     function calculateCost(damageType, isLuxury) {
 //         const damage = repairData[damageType];
 //         if (!damage) return null;
@@ -603,8 +633,9 @@
 
 //         const subtotalMin = partsMin + laborMin;
 //         const subtotalMax = partsMax + laborMax;
-//         const gstMin = subtotalMin * 0.1;
-//         const gstMax = subtotalMax * 0.1;
+//         const taxRate = 0.1; // GST for Australia, could be made configurable
+//         const gstMin = subtotalMin * taxRate;
+//         const gstMax = subtotalMax * taxRate;
 //         const totalMin = subtotalMin + gstMin;
 //         const totalMax = subtotalMax + gstMax;
 
@@ -613,28 +644,29 @@
 //             labor: { min: laborMin, max: laborMax },
 //             subtotal: { min: subtotalMin, max: subtotalMax },
 //             gst: { min: gstMin, max: gstMax },
-//             total: { min: totalMin, max: totalMax }
+//             total: { min: totalMin, max: totalMax },
+//             currency: config.currency
 //         };
 //     }
 
-//     // Function to format currency (unchanged)
-//     function formatCurrency(amount) {
-//         return new Intl.NumberFormat('en-AU', {
+//     // Function to format currency
+//     function formatCurrency(amount, currency = config.currency) {
+//         return new Intl.NumberFormat('en', {
 //             style: 'currency',
-//             currency: 'AUD',
+//             currency: currency,
 //             minimumFractionDigits: 0,
 //             maximumFractionDigits: 0
 //         }).format(Math.round(amount));
 //     }
 
-//     // Function to display cost breakdown (unchanged)
+//     // Function to display cost breakdown
 //     function displayCostBreakdown(costs, damageType) {
 //         const breakdown = document.getElementById('cost-breakdown');
 //         const damageName = repairData[damageType].name;
         
 //         breakdown.innerHTML = `
 //             <h3>${damageName}</h3>
-//             <p>Cost breakdown for Australian market</p>
+//             <p>Cost breakdown for ${config.region} market</p>
 //             <div class="crw-cost-item">
 //                 <span>Parts Cost:</span>
 //                 <span>${formatCurrency(costs.parts.min)} - ${formatCurrency(costs.parts.max)}</span>
@@ -654,13 +686,13 @@
 //         `;
 //     }
 
-//     // Lead capture function (unchanged)
+//     // Lead capture function
 //     function submitLead(leadData) {
-//         console.log('Lead captured:', leadData);
+//         console.log('Lead captured:', { ...leadData, config });
 //         return Promise.resolve();
 //     }
 
-//     // Initialize widget (unchanged)
+//     // Initialize widget
 //     function initWidget() {
 //         const styleSheet = document.createElement('style');
 //         styleSheet.textContent = styles;
@@ -728,20 +760,22 @@
 //                     isLuxury: document.getElementById('luxuryVehicle').checked,
 //                     timestamp: new Date().toISOString(),
 //                     userAgent: navigator.userAgent,
-//                     url: window.location.href
+//                     url: window.location.href,
+//                     brandingConfig: config
 //                 };
                 
 //                 await submitLead(leadData);
                 
 //                 const successDiv = document.createElement('div');
 //                 successDiv.className = 'crw-success-message';
-//                 successDiv.innerHTML = '✅ Thank you! We\'ll contact you soon with a detailed quote.';
+//                 successDiv.innerHTML = '✅ Thank you! We’ll contact you soon with a detailed quote.';
 //                 leadForm.appendChild(successDiv);
                 
 //                 setTimeout(() => {
 //                     form.reset();
 //                     leadForm.reset();
 //                     result.classList.remove('show');
+//                     successDiv.remove();
 //                     closeModal();
 //                 }, 2000);
                 
@@ -761,7 +795,7 @@
 //         });
 
 //         function trackEvent(eventName, data = {}) {
-//             console.log('Event:', eventName, data);
+//             console.log('Event:', eventName, { ...data, config });
 //         }
 
 //         toggle.addEventListener('click', () => trackEvent('widget_opened'));
@@ -775,7 +809,6 @@
 //         initWidget();
 //     }
 // })();
-
 
 (function() {
     'use strict';
@@ -970,21 +1003,22 @@
         
         .crw-close {
             position: absolute;
-            top: 16px;
-            right: 16px;
+            top: 12px;
+            right: 12px;
             background: none;
             border: none;
             color: white;
-            font-size: 28px;
+            font-size: 24px;
             cursor: pointer;
             opacity: 0.8;
             transition: all 0.2s;
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            z-index: 10;
         }
         
         .crw-close:hover {
@@ -1230,7 +1264,7 @@
             }
             
             .crw-header {
-                padding: 20px;
+                padding: 16px;
             }
             
             .crw-logo {
@@ -1252,6 +1286,14 @@
             
             .crw-form-row .crw-form-group {
                 min-width: 100%;
+            }
+            
+            .crw-close {
+                top: 8px;
+                right: 8px;
+                width: 28px;
+                height: 28px;
+                font-size: 20px;
             }
         }
         
@@ -1280,7 +1322,7 @@
             }
             
             .crw-header {
-                padding: 16px;
+                padding: 12px;
             }
             
             .crw-logo {
@@ -1299,6 +1341,15 @@
             .crw-btn {
                 font-size: 14px;
                 padding: 12px;
+            }
+            
+            .crw-close {
+                top: 6px;
+                right: 6px;
+                width: 24px;
+                height: 24px;
+                font-size: 18px;
+                background: rgba(0, 0, 0, 0.2);
             }
         }
     `;
@@ -1393,7 +1444,7 @@
         </div>
     `;
 
-    // Function to calculate repair cost (updated for currency support)
+    // Function to calculate repair cost
     function calculateCost(damageType, isLuxury) {
         const damage = repairData[damageType];
         if (!damage) return null;
