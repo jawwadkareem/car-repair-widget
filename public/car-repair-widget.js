@@ -1,3 +1,4 @@
+
 // (function() {
 //     'use strict';
     
@@ -191,21 +192,22 @@
         
 //         .crw-close {
 //             position: absolute;
-//             top: 16px;
-//             right: 16px;
+//             top: 12px;
+//             right: 12px;
 //             background: none;
 //             border: none;
 //             color: white;
-//             font-size: 28px;
+//             font-size: 24px;
 //             cursor: pointer;
 //             opacity: 0.8;
 //             transition: all 0.2s;
-//             width: 40px;
-//             height: 40px;
+//             width: 32px;
+//             height: 32px;
 //             display: flex;
 //             align-items: center;
 //             justify-content: center;
 //             border-radius: 50%;
+//             z-index: 10;
 //         }
         
 //         .crw-close:hover {
@@ -451,7 +453,7 @@
 //             }
             
 //             .crw-header {
-//                 padding: 20px;
+//                 padding: 16px;
 //             }
             
 //             .crw-logo {
@@ -473,6 +475,14 @@
             
 //             .crw-form-row .crw-form-group {
 //                 min-width: 100%;
+//             }
+            
+//             .crw-close {
+//                 top: 8px;
+//                 right: 8px;
+//                 width: 28px;
+//                 height: 28px;
+//                 font-size: 20px;
 //             }
 //         }
         
@@ -501,7 +511,7 @@
 //             }
             
 //             .crw-header {
-//                 padding: 16px;
+//                 padding: 12px;
 //             }
             
 //             .crw-logo {
@@ -520,6 +530,15 @@
 //             .crw-btn {
 //                 font-size: 14px;
 //                 padding: 12px;
+//             }
+            
+//             .crw-close {
+//                 top: 6px;
+//                 right: 6px;
+//                 width: 24px;
+//                 height: 24px;
+//                 font-size: 18px;
+//                 background: rgba(0, 0, 0, 0.2);
 //             }
 //         }
 //     `;
@@ -614,7 +633,7 @@
 //         </div>
 //     `;
 
-//     // Function to calculate repair cost (updated for currency support)
+//     // Function to calculate repair cost
 //     function calculateCost(damageType, isLuxury) {
 //         const damage = repairData[damageType];
 //         if (!damage) return null;
@@ -825,28 +844,37 @@
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         disclaimer: 'Estimates are approximate. Contact us for a detailed inspection.',
         currency: 'AUD',
-        region: 'Australia'
+        region: 'Australia',
+        apiUrl: 'http://localhost:3000/api/estimate'
     };
 
     // Merge user config with defaults
     const config = { ...defaultConfig, ...(window.CarRepairWidgetConfig || {}) };
 
-    // Widget data
+    // Widget data (aligned with backend)
     const repairData = {
         'rear-bumper': {
             name: 'Rear Bumper Damage',
             parts: { min: 282, max: 565 },
-            labor: { min: 377, max: 754 }
+            labor: { min: 377, max: 754 },
+            painting: { min: 377, max: 754 }
+        },
+        'underbody-panel': {
+            name: 'Underbody Panel Damage',
+            parts: { min: 94, max: 282 },
+            labor: { min: 188, max: 377 }
         },
         'front-bumper': {
             name: 'Front Bumper Damage',
             parts: { min: 300, max: 600 },
-            labor: { min: 400, max: 800 }
+            labor: { min: 400, max: 800 },
+            painting: { min: 400, max: 800 }
         },
         'door-panel': {
             name: 'Door Panel Damage',
             parts: { min: 200, max: 450 },
-            labor: { min: 300, max: 600 }
+            labor: { min: 300, max: 600 },
+            painting: { min: 200, max: 400 }
         },
         'headlight': {
             name: 'Headlight Damage',
@@ -863,15 +891,11 @@
             parts: { min: 80, max: 250 },
             labor: { min: 50, max: 150 }
         },
-        'underbody-panel': {
-            name: 'Underbody Panel Damage',
-            parts: { min: 200, max: 400 },
-            labor: { min: 250, max: 500 }
-        },
         'bonnet': {
             name: 'Bonnet/Hood Damage',
             parts: { min: 400, max: 800 },
-            labor: { min: 300, max: 600 }
+            labor: { min: 300, max: 600 },
+            painting: { min: 300, max: 600 }
         }
     };
 
@@ -1042,7 +1066,7 @@
             font-size: 14px;
         }
         
-        .crw-select, .crw-input {
+        .crw-select, .crw-input, .crw-file-input {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e5e7eb;
@@ -1053,7 +1077,11 @@
             font-family: ${config.fontFamily};
         }
         
-        .crw-select:focus, .crw-input:focus {
+        .crw-file-input {
+            padding: 8px;
+        }
+        
+        .crw-select:focus, .crw-input:focus, .crw-file-input:focus {
             outline: none;
             border-color: ${config.primaryColor};
             box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
@@ -1236,6 +1264,17 @@
             font-weight: 500;
         }
         
+        .crw-error-message {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
         /* Responsive Design */
         @media (max-width: 768px) {
             #car-repair-widget {
@@ -1333,7 +1372,7 @@
                 font-size: 18px;
             }
             
-            .crw-select, .crw-input {
+            .crw-select, .crw-input, .crw-file-input {
                 font-size: 14px;
                 padding: 10px 12px;
             }
@@ -1354,7 +1393,7 @@
         }
     `;
 
-    // Updated HTML structure with logo and custom disclaimer
+    // Updated HTML structure with image upload
     const widgetHTML = `
         <div id="car-repair-widget">
             <button class="crw-toggle-btn" id="crw-toggle" title="Get Car Repair Estimate">
@@ -1393,13 +1432,18 @@
                             </div>
                             
                             <div class="crw-form-group">
-                                <label class="crw-label" for="damageType">Type of Damage</label>
-                                <select class="crw-select" id="damageType" required>
+                                <label class="crw-label" for="damageType">Type of Damage (Optional)</label>
+                                <select class="crw-select" id="damageType">
                                     <option value="">Select Damage Type</option>
                                     ${Object.entries(repairData).map(([key, data]) => 
                                         `<option value="${key}">${data.name}</option>`
                                     ).join('')}
                                 </select>
+                            </div>
+                            
+                            <div class="crw-form-group">
+                                <label class="crw-label" for="damageImage">Upload Damage Image (Optional)</label>
+                                <input type="file" class="crw-file-input" id="damageImage" accept="image/jpeg,image/png">
                             </div>
                             
                             <div class="crw-checkbox-group">
@@ -1444,41 +1488,6 @@
         </div>
     `;
 
-    // Function to calculate repair cost
-    function calculateCost(damageType, isLuxury) {
-        const damage = repairData[damageType];
-        if (!damage) return null;
-
-        let partsMin = damage.parts.min;
-        let partsMax = damage.parts.max;
-        let laborMin = damage.labor.min;
-        let laborMax = damage.labor.max;
-
-        if (isLuxury) {
-            partsMin *= 1.2;
-            partsMax *= 1.2;
-            laborMin *= 1.2;
-            laborMax *= 1.2;
-        }
-
-        const subtotalMin = partsMin + laborMin;
-        const subtotalMax = partsMax + laborMax;
-        const taxRate = 0.1; // GST for Australia, could be made configurable
-        const gstMin = subtotalMin * taxRate;
-        const gstMax = subtotalMax * taxRate;
-        const totalMin = subtotalMin + gstMin;
-        const totalMax = subtotalMax + gstMax;
-
-        return {
-            parts: { min: partsMin, max: partsMax },
-            labor: { min: laborMin, max: laborMax },
-            subtotal: { min: subtotalMin, max: subtotalMax },
-            gst: { min: gstMin, max: gstMax },
-            total: { min: totalMin, max: totalMax },
-            currency: config.currency
-        };
-    }
-
     // Function to format currency
     function formatCurrency(amount, currency = config.currency) {
         return new Intl.NumberFormat('en', {
@@ -1492,7 +1501,7 @@
     // Function to display cost breakdown
     function displayCostBreakdown(costs, damageType) {
         const breakdown = document.getElementById('cost-breakdown');
-        const damageName = repairData[damageType].name;
+        const damageName = repairData[damageType]?.name || 'Car Damage';
         
         breakdown.innerHTML = `
             <h3>${damageName}</h3>
@@ -1505,6 +1514,12 @@
                 <span>Labor Cost:</span>
                 <span>${formatCurrency(costs.labor.min)} - ${formatCurrency(costs.labor.max)}</span>
             </div>
+            ${costs.painting ? `
+                <div class="crw-cost-item">
+                    <span>Painting Cost:</span>
+                    <span>${formatCurrency(costs.painting.min)} - ${formatCurrency(costs.painting.max)}</span>
+                </div>
+            ` : ''}
             <div class="crw-cost-item">
                 <span>GST (10%):</span>
                 <span>${formatCurrency(costs.gst.min)} - ${formatCurrency(costs.gst.max)}</span>
@@ -1516,7 +1531,7 @@
         `;
     }
 
-    // Lead capture function
+    // Lead capture function (placeholder)
     function submitLead(leadData) {
         console.log('Lead captured:', { ...leadData, config });
         return Promise.resolve();
@@ -1550,23 +1565,101 @@
         function closeModal() {
             modal.classList.remove('show');
             document.body.style.overflow = '';
+            form.reset();
+            result.classList.remove('show');
         }
 
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const damageType = document.getElementById('damageType').value;
-            const isLuxury = document.getElementById('luxuryVehicle').checked;
+            const calculateBtn = document.getElementById('calculateBtn');
+            const originalText = calculateBtn.textContent;
+            calculateBtn.textContent = 'Calculating...';
+            calculateBtn.disabled = true;
+
             const carMake = document.getElementById('carMake').value;
             const carYear = document.getElementById('carYear').value;
-            
-            if (damageType && carMake && carYear) {
-                const costs = calculateCost(damageType, isLuxury);
-                if (costs) {
-                    displayCostBreakdown(costs, damageType);
-                    result.classList.add('show');
-                    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const damageType = document.getElementById('damageType').value;
+            const isLuxury = document.getElementById('luxuryVehicle').checked;
+            const imageInput = document.getElementById('damageImage');
+            const imageFile = imageInput.files[0];
+
+            if (!carMake || !carYear) {
+                showError('Please select car make and year.');
+                calculateBtn.textContent = originalText;
+                calculateBtn.disabled = false;
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('carMake', carMake);
+                formData.append('carYear', carYear);
+                formData.append('isLuxury', isLuxury);
+                if (damageType) formData.append('damageType', damageType);
+                if (imageFile) formData.append('image', imageFile);
+
+                const response = await fetch(config.apiUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${await response.text()}`);
                 }
+
+                const data = await response.json();
+                const damageTypeKey = Object.keys(data)[0];
+                displayCostBreakdown(data[damageTypeKey], damageTypeKey);
+                result.classList.add('show');
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                clearError();
+            } catch (error) {
+                console.error('API error:', error);
+                showError('Failed to fetch estimate. Using default values.');
+                
+                // Fallback to local calculation
+                const selectedDamageType = damageType || 'rear-bumper';
+                const costs = {
+                    parts: repairData[selectedDamageType].parts,
+                    labor: repairData[selectedDamageType].labor,
+                    painting: repairData[selectedDamageType].painting || null,
+                    subtotal: {
+                        min: repairData[selectedDamageType].parts.min + repairData[selectedDamageType].labor.min,
+                        max: repairData[selectedDamageType].parts.max + repairData[selectedDamageType].labor.max
+                    },
+                    gst: {
+                        min: (repairData[selectedDamageType].parts.min + repairData[selectedDamageType].labor.min) * 0.1,
+                        max: (repairData[selectedDamageType].parts.max + repairData[selectedDamageType].labor.max) * 0.1
+                    },
+                    total: {
+                        min: (repairData[selectedDamageType].parts.min + repairData[selectedDamageType].labor.min) * 1.1,
+                        max: (repairData[selectedDamageType].parts.max + repairData[selectedDamageType].labor.max) * 1.1
+                    },
+                    currency: config.currency
+                };
+                if (isLuxury) {
+                    costs.parts.min *= 1.2;
+                    costs.parts.max *= 1.2;
+                    costs.labor.min *= 1.2;
+                    costs.labor.max *= 1.2;
+                    if (costs.painting) {
+                        costs.painting.min *= 1.2;
+                        costs.painting.max *= 1.2;
+                    }
+                    costs.subtotal.min *= 1.2;
+                    costs.subtotal.max *= 1.2;
+                    costs.gst.min *= 1.2;
+                    costs.gst.max *= 1.2;
+                    costs.total.min *= 1.2;
+                    costs.total.max *= 1.2;
+                }
+                displayCostBreakdown(costs, selectedDamageType);
+                result.classList.add('show');
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } finally {
+                calculateBtn.textContent = originalText;
+                calculateBtn.disabled = false;
             }
         });
 
@@ -1611,7 +1704,7 @@
                 
             } catch (error) {
                 console.error('Error submitting lead:', error);
-                alert('Sorry, there was an error submitting your request. Please try again.');
+                showError('Sorry, there was an error submitting your request. Please try again.');
             } finally {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
@@ -1624,11 +1717,26 @@
             }
         });
 
-        function trackEvent(eventName, data = {}) {
-            console.log('Event:', eventName, { ...data, config });
+        function showError(message) {
+            let errorDiv = document.querySelector('.crw-error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'crw-error-message';
+                form.parentNode.insertBefore(errorDiv, form.nextSibling);
+            }
+            errorDiv.textContent = message;
         }
 
-        toggle.addEventListener('click', () => trackEvent('widget_opened'));
+        function clearError() {
+            const errorDiv = document.querySelector('.crw-error-message');
+            if (errorDiv) errorDiv.remove();
+        }
+
+        function trackEvent(eventName, data = {}) {
+            console.log(`Event: ${eventName}`, ${...data, config});
+        }
+
+        toggle.addEventListener('click", () => ' trackEvent('widget_opened'));
         form.addEventListener('submit', () => trackEvent('estimate_calculated'));
         leadForm.addEventListener('submit', () => trackEvent('lead_submitted'));
     }
