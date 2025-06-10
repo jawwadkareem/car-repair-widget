@@ -851,62 +851,13 @@
     // Merge user config with defaults
     const config = { ...defaultConfig, ...(window.CarRepairWidgetConfig || {}) };
 
-    // Widget data (aligned with backend)
-    const repairData = {
-        'rear-bumper': {
-            name: 'Rear Bumper Damage',
-            parts: { min: 282, max: 565 },
-            labor: { min: 377, max: 754 },
-            painting: { min: 377, max: 754 }
-        },
-        'underbody-panel': {
-            name: 'Underbody Panel Damage',
-            parts: { min: 94, max: 282 },
-            labor: { min: 188, max: 377 }
-        },
-        'front-bumper': {
-            name: 'Front Bumper Damage',
-            parts: { min: 300, max: 600 },
-            labor: { min: 400, max: 800 },
-            painting: { min: 400, max: 800 }
-        },
-        'door-panel': {
-            name: 'Door Panel Damage',
-            parts: { min: 200, max: 450 },
-            labor: { min: 300, max: 600 },
-            painting: { min: 200, max: 400 }
-        },
-        'headlight': {
-            name: 'Headlight Damage',
-            parts: { min: 150, max: 400 },
-            labor: { min: 100, max: 200 }
-        },
-        'windscreen': {
-            name: 'Windscreen Damage',
-            parts: { min: 300, max: 800 },
-            labor: { min: 150, max: 300 }
-        },
-        'side-mirror': {
-            name: 'Side Mirror Damage',
-            parts: { min: 80, max: 250 },
-            labor: { min: 50, max: 150 }
-        },
-        'bonnet': {
-            name: 'Bonnet/Hood Damage',
-            parts: { min: 400, max: 800 },
-            labor: { min: 300, max: 600 },
-            painting: { min: 300, max: 600 }
-        }
-    };
-
     const carMakes = [
-        'Toyota', 'Holden', 'Mercedes', 'Ford', 'Mazda', 'Volvo', 
+        'Toyota', 'Holden', 'Ford', 'Mazda', 'Hyundai', 
         'Nissan', 'Volkswagen', 'BMW', 'Mercedes-Benz', 
-        'Audi', 'Tesla', 'Lexus',
-        'Subaru', 'Mitsubishi', 'Other'
+        'Audi', 'Tesla', 'Lexus', 'Subaru', 'Mitsubishi', 'Other'
     ];
 
-    // Widget styles
+    // Styles (unchanged from original)
     const styles = `
         #car-repair-widget * {
             box-sizing: border-box;
@@ -1067,7 +1018,7 @@
             font-size: 14px;
         }
         
-        .crw-select, .crw-input, .crw-file-input {
+        .crw-select, .crw-input, .crw-file {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e5e7eb;
@@ -1078,14 +1029,14 @@
             font-family: ${config.fontFamily};
         }
         
-        .crw-file-input {
-            padding: 8px;
-        }
-        
-        .crw-select:focus, .crw-input:focus, .crw-file-input:focus {
+        .crw-select:focus, .crw-input:focus, .crw-file:focus {
             outline: none;
             border-color: ${config.primaryColor};
             box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .crw-file {
+            padding: 10px 16px;
         }
         
         .crw-checkbox-group {
@@ -1265,17 +1216,6 @@
             font-weight: 500;
         }
         
-        .crw-error-message {
-            background: #fee2e2;
-            border: 1px solid #fecaca;
-            color: #b91c1c;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 16px;
-            text-align: center;
-            font-weight: 500;
-        }
-        
         /* Responsive Design */
         @media (max-width: 768px) {
             #car-repair-widget {
@@ -1373,7 +1313,7 @@
                 font-size: 18px;
             }
             
-            .crw-select, .crw-input, .crw-file-input {
+            .crw-select, .crw-input, .crw-file {
                 font-size: 14px;
                 padding: 10px 12px;
             }
@@ -1394,7 +1334,7 @@
         }
     `;
 
-    // HTML structure with image upload
+    // Updated HTML structure with image upload
     const widgetHTML = `
         <div id="car-repair-widget">
             <button class="crw-toggle-btn" id="crw-toggle" title="Get Car Repair Estimate">
@@ -1411,18 +1351,18 @@
                     </div>
                     
                     <div class="crw-body">
-                        <form id="crw-form">
+                        <form id="crw-form" enctype="multipart/form-data">
                             <div class="crw-form-row">
                                 <div class="crw-form-group">
                                     <label class="crw-label" for="carMake">Car Make</label>
-                                    <select class="crw-select" id="carMake" required>
+                                    <select class="crw-select" id="carMake" name="carMake" required>
                                         <option value="">Select Make</option>
                                         ${carMakes.map(make => `<option value="${make}">${make}</option>`).join('')}
                                     </select>
                                 </div>
                                 <div class="crw-form-group">
                                     <label class="crw-label" for="carYear">Year</label>
-                                    <select class="crw-select" id="carYear" required>
+                                    <select class="crw-select" id="carYear" name="carYear" required>
                                         <option value="">Select Year</option>
                                         ${Array.from({length: 25}, (_, i) => {
                                             const year = 2025 - i;
@@ -1433,23 +1373,13 @@
                             </div>
                             
                             <div class="crw-form-group">
-                                <label class="crw-label" for="damageType">Type of Damage (Optional)</label>
-                                <select class="crw-select" id="damageType">
-                                    <option value="">Select Damage Type</option>
-                                    ${Object.entries(repairData).map(([key, data]) => 
-                                        `<option value="${key}">${data.name}</option>`
-                                    ).join('')}
-                                </select>
-                            </div>
-                            
-                            <div class="crw-form-group">
-                                <label class="crw-label" for="damageImage">Upload Damage Image (Optional)</label>
-                                <input type="file" class="crw-file-input" id="damageImage" accept="image/jpeg,image/png">
+                                <label class="crw-label" for="image">Upload Damage Image</label>
+                                <input type="file" class="crw-file" id="image" name="image" accept="image/jpeg,image/png" required>
                             </div>
                             
                             <div class="crw-checkbox-group">
-                                <input type="checkbox" id="luxuryVehicle" class="crw-checkbox">
-                                <label for="luxuryVehicle" class="crw-label">Luxury Vehicle (+20% cost)</label>
+                                <input type="checkbox" id="luxuryVehicle" name="isLuxury" class="crw-checkbox">
+                                <label for="luxuryVehicle" class="crw-label">Luxury Vehicle</label>
                             </div>
                             
                             <button type="submit" class="crw-btn" id="calculateBtn">
@@ -1500,39 +1430,40 @@
     }
 
     // Function to display cost breakdown
-    function displayCostBreakdown(costs, damageType) {
+    function displayCostBreakdown(costs) {
         const breakdown = document.getElementById('cost-breakdown');
-        const damageName = repairData[damageType]?.name || 'Car Damage';
+        const damageType = Object.keys(costs)[0];
+        const costData = costs[damageType];
         
         breakdown.innerHTML = `
-            <h3>${damageName}</h3>
+            <h3>${damageType.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</h3>
             <p>Cost breakdown for ${config.region} market</p>
             <div class="crw-cost-item">
                 <span>Parts Cost:</span>
-                <span>${formatCurrency(costs.parts.min)} - ${formatCurrency(costs.parts.max)}</span>
+                <span>${formatCurrency(costData.parts.min)} - ${formatCurrency(costData.parts.max)}</span>
             </div>
             <div class="crw-cost-item">
                 <span>Labor Cost:</span>
-                <span>${formatCurrency(costs.labor.min)} - ${formatCurrency(costs.labor.max)}</span>
+                <span>${formatCurrency(costData.labor.min)} - ${formatCurrency(costData.labor.max)}</span>
             </div>
-            ${costs.painting ? `
-                <div class="crw-cost-item">
-                    <span>Painting Cost:</span>
-                    <span>${formatCurrency(costs.painting.min)} - ${formatCurrency(costs.painting.max)}</span>
-                </div>
+            ${costData.painting ? `
+            <div class="crw-cost-item">
+                <span>Painting Cost:</span>
+                <span>${formatCurrency(costData.painting.min)} - ${formatCurrency(costData.painting.max)}</span>
+            </div>
             ` : ''}
             <div class="crw-cost-item">
                 <span>GST (10%):</span>
-                <span>${formatCurrency(costs.gst.min)} - ${formatCurrency(costs.gst.max)}</span>
+                <span>${formatCurrency(costData.gst.min)} - ${formatCurrency(costData.gst.max)}</span>
             </div>
             <div class="crw-cost-item">
                 <span><strong>Total Estimate:</strong></span>
-                <span><strong>${formatCurrency(costs.total.min)} - ${formatCurrency(costs.total.max)}</strong></span>
+                <span><strong>${formatCurrency(costData.total.min)} - ${formatCurrency(costData.total.max)}</strong></span>
             </div>
         `;
     }
 
-    // Lead capture function (placeholder)
+    // Lead capture function
     function submitLead(leadData) {
         console.log('Lead captured:', { ...leadData, config });
         return Promise.resolve();
@@ -1552,6 +1483,8 @@
         const form = document.getElementById('crw-form');
         const result = document.getElementById('crw-result');
         const leadForm = document.getElementById('lead-form');
+
+        let lastCosts = null; // Store last cost estimate for lead submission
 
         toggle.addEventListener('click', () => {
             modal.classList.add('show');
@@ -1578,86 +1511,27 @@
             calculateBtn.textContent = 'Calculating...';
             calculateBtn.disabled = true;
 
-            const carMake = document.getElementById('carMake').value;
-            const carYear = document.getElementById('carYear').value;
-            const damageType = document.getElementById('damageType').value;
-            const isLuxury = document.getElementById('luxuryVehicle').checked;
-            const imageInput = document.getElementById('damageImage');
-            const imageFile = imageInput.files[0];
-
-            if (!carMake || !carYear) {
-                showError('Please select car make and year.');
-                calculateBtn.textContent = originalText;
-                calculateBtn.disabled = false;
-                return;
-            }
-
             try {
-                const formData = new FormData();
-                formData.append('carMake', carMake);
-                formData.append('carYear', carYear);
-                formData.append('isLuxury', isLuxury);
-                if (damageType) formData.append('damageType', damageType);
-                if (imageFile) formData.append('image', imageFile);
-
+                const formData = new FormData(form);
+                
                 const response = await fetch(config.apiUrl, {
                     method: 'POST',
                     body: formData
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to fetch estimate');
                 }
 
-                const data = await response.json();
-                const damageTypeKey = Object.keys(data)[0];
-                displayCostBreakdown(data[damageTypeKey], damageTypeKey);
+                const costs = await response.json();
+                lastCosts = costs; // Store for lead submission
+                displayCostBreakdown(costs);
                 result.classList.add('show');
                 result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                clearError();
             } catch (error) {
-                console.error('API error:', error);
-                showError('Failed to fetch estimate. Using default values.');
-                
-                // Fallback to local calculation
-                const selectedDamageType = damageType || 'rear-bumper';
-                const costs = {
-                    parts: repairData[selectedDamageType].parts,
-                    labor: repairData[selectedDamageType].labor,
-                    painting: repairData[selectedDamageType].painting || null,
-                    subtotal: {
-                        min: repairData[selectedDamageType].parts.min + repairData[selectedDamageType].labor.min,
-                        max: repairData[selectedDamageType].parts.max + repairData[selectedDamageType].labor.max
-                    },
-                    gst: {
-                        min: (repairData[selectedDamageType].parts.min + repairData[selectedDamageType].labor.min) * 0.1,
-                        max: (repairData[selectedDamageType].parts.max + repairData[selectedDamageType].labor.max) * 0.1
-                    },
-                    total: {
-                        min: (repairData[selectedDamageType].parts.min + repairData[selectedDamageType].labor.min) * 1.1,
-                        max: (repairData[selectedDamageType].parts.max + repairData[selectedDamageType].labor.max) * 1.1
-                    },
-                    currency: config.currency
-                };
-                if (isLuxury) {
-                    costs.parts.min *= 1.2;
-                    costs.parts.max *= 1.2;
-                    costs.labor.min *= 1.2;
-                    costs.labor.max *= 1.2;
-                    if (costs.painting) {
-                        costs.painting.min *= 1.2;
-                        costs.painting.max *= 1.2;
-                    }
-                    costs.subtotal.min *= 1.2;
-                    costs.subtotal.max *= 1.2;
-                    costs.gst.min *= 1.2;
-                    costs.gst.max *= 1.2;
-                    costs.total.min *= 1.2;
-                    costs.total.max *= 1.2;
-                }
-                displayCostBreakdown(costs, selectedDamageType);
-                result.classList.add('show');
-                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                console.error('Error fetching estimate:', error);
+                alert(`Error: ${error.message}`);
             } finally {
                 calculateBtn.textContent = originalText;
                 calculateBtn.disabled = false;
@@ -1680,8 +1554,8 @@
                     phone: document.getElementById('leadPhone').value,
                     carMake: document.getElementById('carMake').value,
                     carYear: document.getElementById('carYear').value,
-                    damageType: document.getElementById('damageType').value,
                     isLuxury: document.getElementById('luxuryVehicle').checked,
+                    costEstimate: lastCosts,
                     timestamp: new Date().toISOString(),
                     userAgent: navigator.userAgent,
                     url: window.location.href,
@@ -1705,7 +1579,7 @@
                 
             } catch (error) {
                 console.error('Error submitting lead:', error);
-                showError('Sorry, there was an error submitting your request. Please try again.');
+                alert('Sorry, there was an error submitting your request. Please try again.');
             } finally {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
@@ -1718,23 +1592,8 @@
             }
         });
 
-        function showError(message) {
-            let errorDiv = document.querySelector('.crw-error-message');
-            if (!errorDiv) {
-                errorDiv = document.createElement('div');
-                errorDiv.className = 'crw-error-message';
-                form.parentNode.insertBefore(errorDiv, form.nextSibling);
-            }
-            errorDiv.textContent = message;
-        }
-
-        function clearError() {
-            const errorDiv = document.querySelector('.crw-error-message');
-            if (errorDiv) errorDiv.remove();
-        }
-
         function trackEvent(eventName, data = {}) {
-            console.log(`Event: ${eventName}`, {...data, config});
+            console.log('Event:', eventName, { ...data, config });
         }
 
         toggle.addEventListener('click', () => trackEvent('widget_opened'));
