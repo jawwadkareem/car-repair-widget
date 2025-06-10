@@ -900,12 +900,13 @@
     };
 
     const carMakes = [
-        'Toyota', 'Holden', 'Ford', 'Mazda', 'Hyundai', 
+        'Toyota', 'Holden', 'Mercedes', 'Ford', 'Mazda', 'Volvo', 
         'Nissan', 'Volkswagen', 'BMW', 'Mercedes-Benz', 
-        'Audi', 'Tesla', 'Lexus', 'Subaru', 'Mitsubishi', 'Other'
+        'Audi', 'Tesla', 'Lexus',
+        'Subaru', 'Mitsubishi', 'Other'
     ];
 
-    // Updated widget styles with dynamic colors and fonts
+    // Widget styles
     const styles = `
         #car-repair-widget * {
             box-sizing: border-box;
@@ -1393,7 +1394,7 @@
         }
     `;
 
-    // Updated HTML structure with image upload
+    // HTML structure with image upload
     const widgetHTML = `
         <div id="car-repair-widget">
             <button class="crw-toggle-btn" id="crw-toggle" title="Get Car Repair Estimate">
@@ -1733,10 +1734,10 @@
         }
 
         function trackEvent(eventName, data = {}) {
-            console.log(`Event: ${eventName}`, ${...data, config});
+            console.log(`Event: ${eventName}`, {...data, config});
         }
 
-        toggle.addEventListener('click", () => ' trackEvent('widget_opened'));
+        toggle.addEventListener('click', () => trackEvent('widget_opened'));
         form.addEventListener('submit', () => trackEvent('estimate_calculated'));
         leadForm.addEventListener('submit', () => trackEvent('lead_submitted'));
     }
