@@ -1623,7 +1623,7 @@
         disclaimer: 'Estimates are approximate. Contact us for a detailed inspection.',
         currency: 'AUD',
         region: 'Australia',
-        apiUrl: 'http://localhost:3000/api/estimate'
+        apiUrl: 'https://crb.justjdmcars.com.au/api/estimate'
     };
 
     // Merge user config with defaults
