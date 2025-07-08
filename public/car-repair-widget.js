@@ -2420,7 +2420,7 @@
         'Audi', 'Tesla', 'Lexus', 'Subaru', 'Mitsubishi', 'Other'
     ];
 
-    // Styles (unchanged)
+    // Updated styles with exact bottom-right positioning
     const styles = `
         #car-repair-widget * {
             box-sizing: border-box;
@@ -2467,8 +2467,8 @@
         
         .crw-modal {
             position: fixed;
-            bottom: 90px;
-            right: 20px;
+            bottom: 0;
+            right: 0;
             width: 100%;
             max-width: 400px;
             display: none;
@@ -2493,7 +2493,7 @@
         
         .crw-modal-content {
             background: #ffffff;
-            border-radius: 16px;
+            border-radius: 16px 16px 0 0;
             width: 100%;
             max-height: 70vh;
             overflow-y: auto;
@@ -2784,14 +2784,14 @@
             }
             
             .crw-modal {
-                bottom: 80px;
-                right: 16px;
+                bottom: 0;
+                right: 0;
                 max-width: 350px;
             }
             
             .crw-modal-content {
                 max-height: 80vh;
-                border-radius: 12px;
+                border-radius: 12px 12px 0 0;
             }
             
             .crw-body {
@@ -2845,13 +2845,14 @@
             }
             
             .crw-modal {
-                bottom: 70px;
-                right: 12px;
+                bottom: 0;
+                right: 0;
                 max-width: 300px;
             }
             
             .crw-modal-content {
                 max-height: 85vh;
+                border-radius: 12px 12px 0 0;
             }
             
             .crw-body {
@@ -2891,7 +2892,7 @@
         }
     `;
 
-    // HTML structure (corrected label id)
+    // HTML structure
     const widgetHTML = `
         <div id="car-repair-widget">
             <button class="crw-toggle-btn" id="crw-toggle" title="Get Car Repair Estimate">
