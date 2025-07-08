@@ -2392,7 +2392,6 @@
 //         initWidget();
 //     }
 // })();
-
 (function() {
     'use strict';
     
@@ -2421,7 +2420,7 @@
         'Audi', 'Tesla', 'Lexus', 'Subaru', 'Mitsubishi', 'Other'
     ];
 
-    // Updated styles for black-and-white theme with bottom-right positioning
+    // Styles (unchanged)
     const styles = `
         #car-repair-widget * {
             box-sizing: border-box;
@@ -2892,7 +2891,7 @@
         }
     `;
 
-    // HTML structure (unchanged)
+    // HTML structure (corrected label id)
     const widgetHTML = `
         <div id="car-repair-widget">
             <button class="crw-toggle-btn" id="crw-toggle" title="Get Car Repair Estimate">
@@ -3046,7 +3045,8 @@
 
         toggle.addEventListener('click', () => {
             modal.classList.add('show');
-            document.body.style.overflow = ''; // No overflow hidden needed
+            toggle.style.display = 'none'; // Hide the toggle button
+            trackEvent('widget_opened');
         });
 
         close.addEventListener('click', closeModal);
@@ -3056,6 +3056,7 @@
 
         function closeModal() {
             modal.classList.remove('show');
+            toggle.style.display = 'flex'; // Show the toggle button
             form.reset();
             result.classList.remove('show');
         }
