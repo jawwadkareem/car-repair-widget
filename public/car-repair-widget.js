@@ -3182,7 +3182,7 @@
         disclaimer: 'Estimates are approximate. Contact us for a detailed inspection.',
         currency: 'AUD',
         region: 'Australia',
-        apiUrl: 'http://localhost:3000/api/estimate' // Updated to match local backend
+        apiUrl: 'https://crb.justjdmcars.com.au/api/estimate' // Updated to match local backend
     };
 
     // Merge user config with defaults
