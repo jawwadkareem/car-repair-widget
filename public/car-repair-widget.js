@@ -4009,7 +4009,7 @@
         'Audi', 'Tesla', 'Lexus', 'Subaru', 'Mitsubishi', 'Other'
     ];
 
-    // Styles (unchanged)
+    // Styles (unchanged, included for completeness)
     const styles = `
         #car-repair-widget * {
             box-sizing: border-box;
@@ -4028,7 +4028,7 @@
         .crw-toggle-btn {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, ${config.primaryColor}  Ascending(0,0,0,0.5) 100%);
+            background: linear-gradient(135deg, ${config.primaryColor} 0%, ${config.secondaryColor} 100%);
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -4037,7 +4037,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #1a1a1a;
+            color: #ffffff;
             font-size: 24px;
             animation: pulse 2s infinite;
         }
@@ -4497,7 +4497,7 @@
         }
     `;
 
-    // HTML structure (updated with iOS-compatible file input)
+    // HTML structure (updated to include error message container)
     const widgetHTML = `
         <div id="car-repair-widget">
             <button class="crw-toggle-btn" id="crw-toggle" title="Get Car Repair Estimate">
@@ -4537,7 +4537,7 @@
                             
                             <div class="crw-form-group">
                                 <label class="crw-label" for="image">Upload Damage Image</label>
-                                <input type="file" class="crw-file" id="image" name="image" accept="image/jpeg,image/png" capture="environment" required>
+                                <input type="file" class="crw-file" id="image" name="image" accept="image/jpeg,image/png" required>
                             </div>
                             
                             <div class="crw-checkbox-group">
@@ -4659,29 +4659,8 @@
         const form = document.getElementById('crw-form');
         const result = document.getElementById('crw-result');
         const leadForm = document.getElementById('lead-form');
-        const fileInput = document.getElementById('image');
 
         let lastCosts = null; // Store last cost estimate for lead submission
-
-        // Validate file input on change
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) {
-                displayError('Please select an image.');
-                return;
-            }
-            if (!['image/jpeg', 'image/png'].includes(file.type)) {
-                displayError('Please upload a JPEG or PNG image.');
-                e.target.value = ''; // Reset file input
-                return;
-            }
-            // Validate file size (e.g., max 10MB)
-            if (file.size > 10 * 1024 * 1024) {
-                displayError('Image file is too large. Maximum size is 10MB.');
-                e.target.value = ''; // Reset file input
-                return;
-            }
-        });
 
         toggle.addEventListener('click', () => {
             modal.classList.add('show');
@@ -4701,7 +4680,6 @@
             result.classList.remove('show');
             document.getElementById('crw-error').classList.remove('show');
             document.getElementById('crw-error').textContent = '';
-            fileInput.value = ''; // Reset file input
         }
 
         form.addEventListener('submit', async (e) => {
@@ -4715,14 +4693,6 @@
             try {
                 const formData = new FormData(form);
                 
-                // Validate form data before sending
-                if (!formData.get('carMake') || !formData.get('carYear')) {
-                    throw new Error('Car make and year are required');
-                }
-                if (!formData.get('image')) {
-                    throw new Error('Image file is required');
-                }
-
                 const response = await fetch(config.apiUrl, {
                     method: 'POST',
                     body: formData
