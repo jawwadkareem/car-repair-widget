@@ -4037,7 +4037,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
+            color: #1a1a1a;
             font-size: 24px;
             animation: pulse 2s infinite;
         }
